@@ -1,0 +1,115 @@
+// Increasing Integer Sequence for a Seven-Segment Display
+
+/*
+ Truth table for each segment
+     a b c d e f g
+    ---------------
+ 0 | 1 1 1 1 1 1 0
+ 1 | 0 1 1 0 0 0 0
+ 2 | 1 1 0 1 1 0 1
+ 3 | 1 1 1 1 0 0 1
+ 4 | 0 1 1 0 0 1 1
+ 5 | 1 0 1 1 0 1 1
+ 6 | 1 0 1 1 1 1 1
+ 7 | 1 1 1 0 0 0 0
+ 8 | 1 1 1 1 1 1 1
+ 9 | 1 1 1 0 0 1 1
+ */
+
+// NOTE: For common anode display, LOW turns segment on and HIGH off
+
+// Naming the display segment connected to each pin
+const int a = 2;
+const int b = 4;
+const int c = 6;
+const int d = 8;
+const int e = 10;
+const int f = 11;
+const int g = 12;
+const int dot = 13;
+
+// Displays the given number on seven-segment display
+void displayNum(int num) {
+
+  // Reset all segments to off
+  shutDown();
+  
+  // Lights each segment if part of the given number based on truth table
+  // Segment a
+  if (num != 1 && num != 4) {
+    digitalWrite(a, LOW);
+  }
+  // Segment b
+  if (num != 5 && num != 6) {
+    digitalWrite(b, LOW);
+  } 
+  // Segment c
+  if (num != 2) {
+    digitalWrite(c, LOW);
+  }
+  // Segment d
+  if (num != 1 && num != 4 && num != 7 && num != 9) {
+    digitalWrite(d, LOW);
+  }
+  // Segment e
+  if (num == 0 || num == 2 || num == 6 || num == 8) {
+    digitalWrite(e, LOW);
+  }
+  // Segment f
+  if (num != 1 && num != 2 && num != 3 && num != 7) {
+    digitalWrite(f, LOW);
+  }
+  // Segment g
+  if (num != 0 && num != 1 && num != 7) {
+    digitalWrite(g, LOW);
+  }
+  
+}
+
+// Blinks dot on seven-segment display three times
+void ellipses() {
+  for (int i = 0; i < 3; i++) {
+    digitalWrite(dot, LOW);
+    delay(1000);
+    digitalWrite(dot, HIGH);
+    delay(1000);
+  }
+}
+
+// Turns off all parts of display
+void shutDown() {
+  digitalWrite(a, HIGH);
+  digitalWrite(b, HIGH);
+  digitalWrite(c, HIGH);
+  digitalWrite(d, HIGH);
+  digitalWrite(e, HIGH);
+  digitalWrite(f, HIGH);
+  digitalWrite(g, HIGH);
+  digitalWrite(dot, HIGH);
+  
+}
+
+
+// Initialize all segment pins as outputs
+void setup() {
+  pinMode(a, OUTPUT);
+  pinMode(b, OUTPUT);
+  pinMode(c, OUTPUT);
+  pinMode(d, OUTPUT);
+  pinMode(e, OUTPUT);
+  pinMode(f, OUTPUT);
+  pinMode(g, OUTPUT);
+  pinMode(dot, OUTPUT);
+
+}
+
+// Displays integers 0-9 then an ellipses on the display
+void loop() {
+  for (int i = 0; i < 10; i++) {
+    displayNum(i);
+    delay(1000);
+  }
+  shutDown();
+  ellipses();
+  delay (1000);
+}
